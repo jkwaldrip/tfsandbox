@@ -14,9 +14,44 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-require 'tfsandbox/version'
+dir = File.expand_path(File.dirname(__FILE__))
+$:.unshift(dir) unless $:.include?(dir)
+
+# Gems
+require 'chronic'
+require 'marc'
+require 'numerizer'
+require 'watir-webdriver'
+require 'selenium/webdriver/remote/http/persistent'
 require 'test-factory'
 
-module Tfsandbox
-  # Your code goes here...
+# Ruby Modules
+require 'yaml'
+require 'fileutils'
+require 'timeout'
+
+module TFSandbox
+
+  # Load settings from config/options.yml
+  @options = YAML.load_file('config/options.yml')
+  # Override settings from config/options.yml with ENV values if found
+  #   
+  #   OLE_URL			:url                    OLE installation
+  #   OLE_DOCSTORE_URL	        :docstore_url           OLE installation's Document Store
+  #   OLE_WAIT			:default_wait		Watir-Webdriver's default timeout value
+  env_options = {
+                  :url          => ENV['OLE_URL'],
+                  :docstore_url => ENV['OLE_DOCSTORE_URL'],
+                  :default_wait => ENV['OLE_WAIT']
+  }.delete_if {|k,v| v.nil?}    # Do not create a key if the value is not found.
+  @options.merge! env_options
+  # Make the options hash readable.
+  class << self
+    attr_reader :options
+  end
+
+  # Load internal classes/modules.
+  Dir['lib/*/*.rb'].sort.each do |file|
+    require file
+  end
 end
