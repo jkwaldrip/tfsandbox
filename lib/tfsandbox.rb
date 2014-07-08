@@ -59,5 +59,10 @@ module TFSandbox
 	Interval = 1
 
   # Load internal classes/modules.
-  Dir['lib/**/*.rb'].sort.each {|file| require file}
+  Dir['lib/tfsandbox/*.rb'].sort.each {|file| require file}
+
+	# Add directories if they do not already exist.
+	['screenshots','data','data/downloads','data/uploads'].each do |dir|
+		FileUtils::mkdir(dir) unless File.directory?(dir)
+	end
 end
