@@ -34,4 +34,5 @@ This gem relies on the following dependencies:
     * MIT License
         * Copyright 2010, Eric Hodel & Aaron Patterson
 * TestFactory
-
+    * Apache 2 License
+        * Copyright 2004, rSmart
