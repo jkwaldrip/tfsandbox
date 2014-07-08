@@ -4,5 +4,6 @@
 ---
 :url: http://tst.ole.kuali.org/
 :docstore_url: http://tst.docstore.ole.kuali.org/
-:headless?: true
 :default_wait: 30
+:headless?: true
+:development?: true

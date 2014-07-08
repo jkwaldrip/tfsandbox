@@ -23,8 +23,8 @@ require 'headless'
 require 'marc'
 require 'numerizer'
 require 'watir-webdriver'
-require 'selenium/webdriver/remote/http/persistent'
 require 'test-factory'
+require 'selenium/webdriver/remote/http/persistent'
 
 # Ruby Modules
 require 'yaml'
@@ -37,32 +37,34 @@ module TFSandbox
   @options = YAML.load_file('config/options.yml')
   # Override settings from config/options.yml with ENV values if found
   #   
-  #   OLE_URL			:url                    OLE installation
-  #   OLE_DOCSTORE_URL	        :docstore_url           OLE installation's Document Store
-  #   OLE_WAIT			:default_wait		Watir-Webdriver's default timeout value
-  env_options = {
+  #   OLE_URL                   :url	                  OLE installation
+  #   OLE_DOCSTORE_URL          :docstore_url						OLE installation's Document Store
+  #   OLE_WAIT                  :default_wait           Watir-Webdriver's default timeout value
+	#   --												:headless?							Run tests headlessly in XVFB?
+	#   --												:development?						Run tests against a development installation?
+	env_options = {
                   :url          => ENV['OLE_URL'],
                   :docstore_url => ENV['OLE_DOCSTORE_URL'],
                   :default_wait => ENV['OLE_WAIT']
   }.delete_if {|k,v| v.nil?}    # Do not create a key if the value is not found.
-  @options.merge! env_options
+  @options.merge!(env_options)
   # Make the options hash readable.
   class << self
     attr_reader :options
   end
 
-	# Set internal error class.
-	class Error < StandardError
-	end
+  # Set internal error class.
+  class Error < StandardError
+  end
 
-	# Set the interval (in seconds) for spin assertions and other loops.
-	Interval = 1
+  # Set the interval (in seconds) for spin assertions and other loops.
+  Interval = 1
 
   # Load internal classes/modules.
   Dir['lib/tfsandbox/*.rb'].sort.each {|file| require file}
 
-	# Add directories if they do not already exist.
-	['screenshots','data','data/downloads','data/uploads'].each do |dir|
-		FileUtils::mkdir(dir) unless File.directory?(dir)
-	end
+  # Add directories if they do not already exist.
+  ['screenshots','data','data/downloads','data/uploads'].each do |dir|
+    FileUtils::mkdir(dir) unless File.directory?(dir)
+  end
 end
