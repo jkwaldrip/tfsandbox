@@ -3,7 +3,8 @@
 .bundle
 .config
 .yardoc
-Gemfile.lock
+.idea/
+.project/
 InstalledFiles
 _yardoc
 coverage
@@ -20,3 +21,5 @@ tmp
 *.o
 *.a
 mkmf.log
+*.swp
+screenshots/
