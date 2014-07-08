@@ -19,6 +19,7 @@ $:.unshift(dir) unless $:.include?(dir)
 
 # Gems
 require 'chronic'
+require 'headless'
 require 'marc'
 require 'numerizer'
 require 'watir-webdriver'
@@ -50,8 +51,13 @@ module TFSandbox
     attr_reader :options
   end
 
+	# Set internal error class.
+	class Error < StandardError
+	end
+
+	# Set the interval (in seconds) for spin assertions and other loops.
+	Interval = 1
+
   # Load internal classes/modules.
-  Dir['lib/*/*.rb'].sort.each do |file|
-    require file
-  end
+  Dir['lib/**/*.rb'].sort.each {|file| require file}
 end
