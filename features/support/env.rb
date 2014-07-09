@@ -38,6 +38,7 @@ Before do |scenario|
 		sleep 5
   end while Time.now < timeout
 	raise TFSandbox::Error,"Browser connection not made after 5 minutes." unless @browser.is_a?(Watir::Browser)
+  @browser.driver.manage.timeouts.implicit_wait = TFSandbox::options[:default_wait]
 end
 
 After do |scenario|

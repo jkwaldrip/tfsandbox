@@ -37,20 +37,30 @@ module TFSandbox
   @options = YAML.load_file('config/options.yml')
   # Override settings from config/options.yml with ENV values if found
   #   
-  #   OLE_URL                   :url	                  OLE installation
-  #   OLE_DOCSTORE_URL          :docstore_url						OLE installation's Document Store
+  #   OLE_URL                   :url                    OLE installation
+  #   OLE_DOCSTORE_URL          :docstore_url           OLE installation's Document Store
   #   OLE_WAIT                  :default_wait           Watir-Webdriver's default timeout value
-	#   --												:headless?							Run tests headlessly in XVFB?
-	#   --												:development?						Run tests against a development installation?
-	env_options = {
+  #   --                        :headless?              Run tests headlessly in XVFB?
+  #   --                        :development?           Run tests against a development installation?
+  env_options = {
                   :url          => ENV['OLE_URL'],
                   :docstore_url => ENV['OLE_DOCSTORE_URL'],
                   :default_wait => ENV['OLE_WAIT']
   }.delete_if {|k,v| v.nil?}    # Do not create a key if the value is not found.
   @options.merge!(env_options)
-  # Make the options hash readable.
+  @url,@docstore_url = @options[:url],@options[:docstore_url]
+
   class << self
+    # Make the options hash readable.
     attr_reader :options
+
+    # Make the URLs from the options hash readable.
+    attr_reader :url,:docstore_url
+
+    # Are the tests running against a development environment.
+    def development?
+      @options[:development?]
+    end
   end
 
   # Set internal error class.
@@ -62,6 +72,7 @@ module TFSandbox
 
   # Load internal classes/modules.
   Dir['lib/tfsandbox/*.rb'].sort.each {|file| require file}
+  Dir['lib/tfsandbox/*/**/*.rb'].sort.each {|file| require file}
 
   # Add directories if they do not already exist.
   ['screenshots','data','data/downloads','data/uploads'].each do |dir|
