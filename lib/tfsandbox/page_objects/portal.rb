@@ -12,11 +12,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-module TFSandbox
-  # A general purpose page object to represent the main UI Portal in OLE.
-  class PortalPage < BasePage
+# A general purpose page object to represent the main UI Portal in OLE.
+class PortalPage < BasePage
 
-    page_url "#{TFSandbox::url}"
+  page_url "#{TFSandbox::url}"
 
-  end
 end

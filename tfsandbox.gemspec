@@ -5,7 +5,7 @@ require 'tfsandbox/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "tfsandbox"
-  spec.version       = TFSandbox::Version
+  spec.version       = Version
   spec.authors       = ["Jain Waldrip"]
   spec.email         = ["jkwaldri@iu.edu"]
   spec.summary       = %q{A Sandbox for TestFactory}

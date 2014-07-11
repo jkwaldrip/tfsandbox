@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 Given /^I am a user$/ do
-  @user = TFSandbox::User.new @browser,:user_name => 'ole-khuntley'
+  @user = User.new @browser,:user_name => 'ole-khuntley'
 end
 
 Then /^I login$/ do

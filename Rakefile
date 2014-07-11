@@ -20,5 +20,5 @@ require 'tfsandbox/version'
 
 desc 'Display the current version number'
 task :version do
-  puts "Version #{TFSandbox::Version}"
+  puts "Version #{Version}"
 end
