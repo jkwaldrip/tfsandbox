@@ -27,11 +27,11 @@ class MarcBibRecord < DataFactory
   def initialize(browser,opts={})
     @browser = browser
     defaults = {
-        # MARC 245 $a
+        # MARC 245 $a  (See lib/tfsandbox/base_objects/marc_line.rb)
         :title                => MarcDataLine.new(:tag => '245',:subfield => '|A',:value => random_letters(pick_range(9..13)).capitalize),
-        # MARC 100 $a
+        # MARC 100 $a  (See lib/tfsandbox/base_objects/marc_line.rb)
         :author               => MarcDataLine.new(:tag => '100',:subfield => '|A',:value => random_name),
-        # The Holdings circulation desk.
+        # The Holdings circulation desk.  (See lib/tfsandbox/base_objects/circulation_desk.rb)
         :circulation_desk     => CirculationDesk.new,
         # The Holdings call number.
         :call_number          => "#{random_letters(1).capitalize}#{random_num_string(pick_range(1..3))}.#{random_letters(pick_range(1..3)).capitalize}#{random_num_string(pick_range(1..3))}",

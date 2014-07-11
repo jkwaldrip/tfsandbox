@@ -58,5 +58,11 @@ class BasePage < PageFactory
       element(:maintenance_tab)        {|b| b.div(:id => 'tabs').ul.li.a(:title => 'Maintenance')}
       element(:admin_tab)              {|b| b.div(:id => 'tabs').ul.li.a(:title => 'Admin')}
     end
+
+    # Select elements in either the iframeportlet or fancybox iframes.
+    def frames
+      element(:iframeportlet)                       {|b| b.iframe(:class => 'iframeportlet')}
+      element(:fancybox)                            {|b| b.iframe(:class => 'fancybox-iframe')}
+    end
   end
 end
