@@ -15,5 +15,5 @@
 # The base page object for legacy KNS-based pages in OLE.
 class KnsPage < BasePage
 
-  frames
+  uses_frames
 end

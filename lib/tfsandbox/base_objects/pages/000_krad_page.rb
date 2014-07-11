@@ -15,5 +15,5 @@
 # The base page object for all KRAD-based pages in OLE.
 class KradPage < BasePage
 
-  frames
+  uses_frames
 end
