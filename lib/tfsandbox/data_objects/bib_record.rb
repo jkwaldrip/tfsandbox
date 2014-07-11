@@ -22,6 +22,8 @@ class MarcBibRecord < DataFactory
 
   include TFSandbox::Helpers
 
+  attr_accessor :title,:author,:circulation_desk,:call_number,:call_number_type,:barcode
+
   def initialize(browser,opts={})
     @browser = browser
     defaults = {
@@ -32,7 +34,7 @@ class MarcBibRecord < DataFactory
         # The Holdings circulation desk.
         :circulation_desk     => CirculationDesk.new,
         # The Holdings call number.
-        :call_number          => "#{random_letters(1)}#{random_num_string(pick_range(1..3))}.#{random_letters(pick_range(1..3))}#{random_num_string(pick_range(1..3))}",
+        :call_number          => "#{random_letters(1).capitalize}#{random_num_string(pick_range(1..3))}.#{random_letters(pick_range(1..3)).capitalize}#{random_num_string(pick_range(1..3))}",
         # The Holdings call number type.
         :call_number_type     => 'LCC',
         # The Item record barcode.
