@@ -22,3 +22,14 @@ desc 'Display the current version number'
 task :version do
   puts "Version #{Version}"
 end
+
+desc 'Remove all test data and screenshots'
+task :clean_all do
+  files = Dir['data/downloads/*','data/upload/*','screenshots/*'].sort
+  if files.empty?
+    puts 'No data found.'
+  else
+    files.each {|file| File.delete file}
+    puts "#{files.count} files deleted."
+  end
+end
