@@ -13,20 +13,53 @@
 #  limitations under the License.
 
 # An OLE non-Patron System User with a login.
+#
+# @note User configuration info is loaded from/written to:
+#   config/institutional/users.yml
 class User < DataFactory
 
+  # Enter information for a new user, or select an existing user by username.
+  # @note Usage:
+  #   This class can be invoked with only the username of an existing user
+  #   or an existing role name and :lookup_role => true to return an existing user.
+  #
+  #   TODO This class can alternately be invoked with a new username and additional user data
+  #   in order to create a new user in the target system and save the user to the users file.
+  #
+  # Options:
+  #   :username       String            The user's unique OLE user ID.
+  #   :role           String            The user's general role.
+  #   :name           String            The user's full name, if any.
+  #   :save?          Boolean           Save the user if new?
+  #                                     (Ignored if a matching username is found.)
+  #   :lookup_role?   Boolean           Lookup a given user role.
+  #                                     (Other parameters will be ignored if this is true.)
+  #
   def initialize(browser,opts={})
     @browser = browser
 
-    defaults = {}
-    set_options(defaults.merge(opts))
+    defaults = {
+      :username => 'ole-quickstart',   # Set this to your local default username.
+      :save?    => false
+    }
+    @options = defaults.merge(opts)
 
-    requires :user_name
+    if user_exists?(:how => 'username',:which => @options[:username]) && ! @options[:lookup_role?]
+      retrieve_user(:how => 'username',:which => @options[:username])
+    elsif @options[:lookup_role?]
+      raise TFSandbox::Error,"Role not found.\n(Given: #{@options[:role]})" unless user_exists?(:how => 'role',:which => @options[:role])
+      retrieve_user(:how => 'role',:which => @options[:role])
+    else create_new(opts) end
+
+    options = @options.delete_if {|k| k.to_s[/\?$/]}
+    set_options(options)
+
+    requires :username
   end
 
   def login
     visit PortalPage do |page|
-      page.login(@user_name)
+      page.login(@username)
     end
   end
 
@@ -38,7 +71,50 @@ class User < DataFactory
 
   def logged_in?
     on BasePage do |page|
-      return page.logged_in_as == @user_name || page.impersonating == @user_name
+      return page.logged_in_as == @username || page.impersonating == @username
     end
+  end
+
+  private
+    
+  # Check if a user exists in the users file. (See #lookup for parameters.)
+  def user_exists?(opts)
+    lookup(opts).nil? ? false : true
+  end
+
+  # Destructively merge 
+  def retrieve_user(opts)
+    @options.merge!(lookup(opts))
+  end
+
+  # Returns a user info hash based on the first matched value from the users file.
+  #
+  # Options
+  #   :how        String      The key to search on.
+  #   :which      String      The value to find.
+  def lookup(opts={})
+    users = YAML.load_file('config/institutional/users.yml')
+    case opts[:how]
+    when 'username'
+      users.select {|user| user[:username] == opts[:which].downcase}[0]
+    when 'role'
+      users.select {|user| user[:role] == opts[:which].downcase}[0]
+    else
+      raise TFSandbox::Error,"User search method not supported.\n(Given: #{opts[:how]})"
+    end
+  end
+
+  # Create a new user.
+  # - Only used if the given username or role is not found in the users file.
+  def create_new(user_info)
+    # TODO Enter workflow to create a new user in the OLE system.
+    save_user(user_info) if user_info[:save?]
+  end
+
+  # Add a user info hash to the users file.
+  def save_user(user_info)
+    users = YAML.load_file('config/institutional/users.yml')
+    users << user_info
+    File.write('config/institutional/users.yml',users.to_yaml)
   end
 end

@@ -12,8 +12,13 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-Given /^I am a user$/ do
-  @user = User.new @browser,:user_name => 'ole-khuntley'
+Given /^I am ([\w\-\_]+)$/ do |username|
+  if username[/(default|any|a user)/]
+    @user = User.new @browser,:role => 'default',:lookup_role? => true
+  # TODO create a catch for role, e.g. 'I am an acquisitions user','I am a circulation user'
+  else
+    @user = User.new @browser,:username => username
+  end
 end
 
 Then /^I login$/ do
