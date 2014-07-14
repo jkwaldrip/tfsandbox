@@ -57,20 +57,24 @@ class User < DataFactory
     requires :username
   end
 
+  def open_portal
+    visit PortalPage
+  end
+
   def login
-    visit PortalPage do |page|
+    on LoginPage do |page|
       page.login(@username)
     end
   end
 
   def logout
-    visit PortalPage do |page|
+    on LoginPage do |page|
       page.logout
     end
   end
 
   def logged_in?
-    on BasePage do |page|
+    on LoginPage do |page|
       return page.logged_in_as == @username || page.impersonating == @username
     end
   end

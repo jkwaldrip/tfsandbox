@@ -22,11 +22,8 @@ Given /^I am ([\w\-\_]+)$/ do |username|
 end
 
 Then /^I login$/ do
+  @user.open_portal
   expect(@user.login).to be_truthy
-end
-
-When /^I am logged in$/ do
-  expect(@user.logged_in?).to be_truthy
 end
 
 Then /^I logout$/ do
