@@ -16,5 +16,8 @@
 #   (Contains methods used by Marc Bib Editor, Holdings Editor, & Item Editor)
 class MarcEditorPage < KradPage
 
+  page_url "#{TFSandbox::url}portal.do?channelTitle=Marc Editor&channelUrl=#{TFSandbox::url}ole-kr-krad/editorcontroller?viewId=EditorView&methodToCall=load&docCategory=work&docType=bibliographic&docFormat=marc&editable=true"
+
+  value(:message)                   {|b| b.iframeportlet.li(:class => 'uif-infoMessageItem').text}
 
 end

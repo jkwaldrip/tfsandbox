@@ -61,7 +61,7 @@ class BasePage < PageFactory
 
     # Select elements in either the iframeportlet or fancybox iframes.
     def uses_frames
-      element(:iframeportlet)                       {|b| b.iframe(:class => 'iframeportlet')}
+      element(:iframeportlet)                       {|b| b.iframe(:id => 'iframeportlet')}
       element(:fancybox)                            {|b| b.iframe(:class => 'fancybox-iframe')}
     end
   end

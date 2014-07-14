@@ -48,6 +48,6 @@ class MarcBibRecord < DataFactory
     set_options(options)
 
     requires :title
-
   end
+
 end
