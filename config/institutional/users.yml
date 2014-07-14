@@ -1,0 +1,17 @@
+#  Default users taken from the OLE Demo Data
+#  Available at:
+#    http://dev.ole.kuali.org/
+#    http://demo.ole.kuali.org/
+---
+- :role: default
+  :username: ole-quickstart
+  :name: ole-quickstart
+- :role: circulation
+  :username: dev2
+  :name: Development 2
+- :role: admin
+  :username: admin
+  :name: Administrator
+- :role: fiscal officer
+  :username: ole-rorenfro
+  :name: Roberta Renfrow
