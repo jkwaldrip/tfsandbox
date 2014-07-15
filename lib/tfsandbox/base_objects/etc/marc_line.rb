@@ -17,7 +17,7 @@ class MarcDataLine
 
   include TFSandbox::Helpers
 
-  attr_accessor :tag,:subfield,:value,:indicator_1,:indicator_2
+  attr_accessor :tag,:indicator_1,:indicator_2,:subfield_code,:subfield,:value
 
   alias :ind_1 :indicator_1
   alias :ind_1= :indicator_1=
@@ -25,11 +25,11 @@ class MarcDataLine
   alias :ind_2= :indicator_2=
 
   # Parameters:
-  #   :tag => String            The MARC field tag
-  #   :indicator_1 => String    The first subfield indicator.
-  #   :indicator_2 => String    The second subfield indicator.
-  #   :subfield => String       The MARC subfield delimiter
-  #   :value => String          The actual value of the field
+  #   :tag              String        The MARC field tag
+  #   :indicator_1      String        The first subfield indicator.
+  #   :indicator_2      String        The second subfield indicator.
+  #   :subfield_code    String        The MARC subfield code/subfield delimiter.
+  #   :value            String        The actual value of the field, without delimiter.
   #
   # @note In the OLE Library System, MARC subfields are delimited with a
   #   vertical bar '|' instead of the standard dollar sign '$', and the
@@ -39,21 +39,19 @@ class MarcDataLine
   def initialize(opts={})
     defaults = {
         :tag          => '245',
-        :subfield     => '|A',
+        :subfield     => '|a',
         :indicator_1  => '#',
         :indicator_2  => '#',
         :value        => random_letters(pick_range(6..10)).capitalize
     }
     options = defaults.merge(opts)
 
-    @tag          = options[:tag]
-    @subfield     = options[:subfield].gsub(/^\$/,'|').upcase
-    @value        = options[:value]
-  end
-
-  # Return the full subfield as it would appear in an OLE bibliographic record.
-  def subfield_full
-    "#{@subfield} #{@value}"
+    @tag              = options[:tag]
+    @subfield_code    = options[:subfield].gsub(/(?<=^)\$/,'|').downcase
+    @indicator_1      = options[:indicator_1]
+    @indicator_2      = options[:indicator_2]
+    @value            = options[:value]
+    @subfield         = "#{@subfield_code} #{value}"
   end
 
   # TODO Incorporate RubyMarc crosswalks here.

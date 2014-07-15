@@ -31,9 +31,16 @@ module TFSandbox
       str
     end
 
+    # Return a random Library of Congress-like string to use as a call number.
+    def random_lcc
+      "#{random_letters(1).capitalize}#{random_num_string(pick_range(1..3))}.#{random_letters(pick_range(1..3)).capitalize}#{random_num_string(pick_range(1..3))}"
+    end
+
     # Pick a random value from a range.
     def pick_range(r = 'A'..'Z')
       r.to_a.sample
     end
   end
 end
+
+

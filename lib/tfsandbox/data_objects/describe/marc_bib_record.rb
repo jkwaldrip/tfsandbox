@@ -24,21 +24,29 @@ class MarcBibRecord < DataFactory
 
   attr_accessor :title,:author,:circulation_desk,:call_number,:call_number_type,:barcode
 
+  # Options:
+  #   :title              String        The title on the bib record.    (Marc 245 $a)
+  #   :author             String        The author on the bib record.   (Marc 100 $a)
+  #   :marc_lines         Array         An array of MARC data values not named above,
+  #                                     instantiated as MarcDataLine objects.
+  #                                     (See lib/base_objects/etc/marc_data_line.rb)
+  #   :circulation_desk   Object        The OLE circulation desk to use.
+  #                                     (See lib/base_objects/etc/circulation_desk.rb)
+  #   :call_number        String        The call number to use on the holdings record.
+  #   :call_number_type   String        The holdings call number type.
+  #   :barcode            String        The barcode to use on the item record.
   def initialize(browser,opts={})
     @browser = browser
     defaults = {
-        # MARC 245 $a  (See lib/tfsandbox/base_objects/marc_line.rb)
-        :title                => MarcDataLine.new(:tag => '245',:subfield => '|A',:value => random_letters(pick_range(9..13)).capitalize),
-        # MARC 100 $a  (See lib/tfsandbox/base_objects/marc_line.rb)
-        :author               => MarcDataLine.new(:tag => '100',:subfield => '|A',:value => random_name),
-        # The Holdings circulation desk.  (See lib/tfsandbox/base_objects/circulation_desk.rb)
+        :title                => random_letters(pick_range(9..13)).capitalize,
+        :author               => random_name,
+        :marc_lines           => []
+=begin
         :circulation_desk     => CirculationDesk.new,
-        # The Holdings call number.
-        :call_number          => "#{random_letters(1).capitalize}#{random_num_string(pick_range(1..3))}.#{random_letters(pick_range(1..3)).capitalize}#{random_num_string(pick_range(1..3))}",
-        # The Holdings call number type.
+        :call_number          => random_lcc,
         :call_number_type     => 'LCC',
-        # The Item record barcode.
         :barcode              => random_num_string(pick_range(9..16),"OLEQA")
+=end
     }
     options = defaults.merge(opts)
 
@@ -47,7 +55,36 @@ class MarcBibRecord < DataFactory
 
     set_options(options)
 
-    requires :title
+    requires :title,:author
+
+    # Add MARC Data Lines for title and author.
+    @marc_lines.unshift(
+      MarcDataLine.new(:tag => '100',:subfield => '|A',:value => @title),
+      MarcDataLine.new(:tag => '245',:subfield => '|A',:value => @author)
+    )
   end
 
+  def create
+    create_bib
+    # create_holdings
+    # create_item
+  end
+
+  # Create a bib record only.
+  def create_bib
+    visit BibEditorPage do |page|
+
+      # Enter all MARC lines in order.
+      @marc_lines.each_with_index do |marc_line,i|
+        page.tag_field(i).when_present.set(marc_line.tag)
+        page.indicator_1_field(i).when_present.set(marc_line.ind_1)
+        page.indicator_2_field(i).when_present.set(marc_line.ind_2)
+        page.value_field(i).when_present.set(marc_line.subfield)
+        page.add_line(i) unless i == @marc_lines.count
+      end
+
+      # Save the bib record.
+      page.save
+    end
+  end
 end
