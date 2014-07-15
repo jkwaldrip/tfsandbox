@@ -22,6 +22,8 @@ require 'chronic'
 require 'headless'
 require 'marc'
 require 'numerizer'
+require 'rspec/expectations'
+require 'rspec/matchers'
 require 'watir-webdriver'
 require 'test-factory'
 require 'selenium/webdriver/remote/http/persistent'
@@ -69,9 +71,14 @@ module TFSandbox
   # Set the interval (in seconds) for spin assertions and other loops.
   Interval = 1
 
+  # Set the default timeout on Watir-Webdriver
+  Watir.default_timeout = @options[:default_wait]
+
   # Load internal classes/modules.
   Dir['lib/tfsandbox/*.rb'].sort.each {|file| require file}
-  Dir['lib/tfsandbox/*/**/*.rb'].sort.each {|file| require file}
+  Dir['lib/tfsandbox/base_objects/**/*.rb'].sort.each {|file| require file}
+  Dir['lib/tfsandbox/page_objects/**/*.rb'].sort.each {|file| require file}
+  Dir['lib/tfsandbox/data_objects/**/*.rb'].sort.each {|file| require file}
 
   # Add directories if they do not already exist.
   ['screenshots','data','data/downloads','data/uploads'].each do |dir|
