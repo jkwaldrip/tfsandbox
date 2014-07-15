@@ -17,6 +17,7 @@ $:.unshift(dir) unless $:.include?(dir)
 
 require 'cucumber/rake/task'
 require 'tfsandbox/version'
+require 'yaml'
 
 desc 'Display the current version number'
 task :version do
@@ -32,4 +33,34 @@ task :clean_all do
     files.each {|file| File.delete file}
     puts "#{files.count} files deleted."
   end
+end
+
+desc 'Show options in config/options.yml'
+task :show_config do
+  options     = YAML.load_file('config/options.yml')
+  options.each do |k,v|
+    puts "#{k.to_s.ljust(20)}:  #{v}"
+  end
+end
+
+desc 'Set options in config/options.yml'
+task :configurator do
+  options     = YAML.load_file('config/options.yml')
+  options.each do |k,v|
+    puts "#{k.to_s.ljust(20)}:  #{v}"
+    puts "... (k)eep or (c)hange? [k|c]"
+    ans = STDIN.gets.chomp
+    if ans =~ /[Cc]/
+      puts "Enter new value:"
+      new_val    = STDIN.gets.chomp
+      if v.is_a?(TrueClass) || v.is_a?(FalseClass)
+        new_val.match(/^[Tt]/) ? new_val = true : new_val = false
+      else
+        new_val = new_val.to_i unless new_val.to_i == 0
+      end
+      options[k] = new_val
+      puts "#{k.to_s.ljust(20)} updated to:  #{new_val}"
+    end
+  end
+  File.write('config/options.yml',options.to_yaml) 
 end
