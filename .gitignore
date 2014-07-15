@@ -1,4 +1,3 @@
-config/options.yml
 *.gem
 *.rbc
 .bundle
