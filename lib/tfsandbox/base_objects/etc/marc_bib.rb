@@ -13,8 +13,30 @@
 #  limitations under the License.
 
 # A MARC format bibliographic record in the OLE Library System.
-# @note This record is a container for bibliographic data only,
-#   not holdings or item record information.
+#   This class serves as a container for MARC record bibliographic data.
 class MarcBib < EtcObject
 
+  # Params:
+  #   :title              String        The title on the bib record.    (Marc 245 $a)
+  #   :author             String        The author on the bib record.   (Marc 100 $a)
+  #   :marc_lines         Array         An array of MARC data values not named above,
+  #                                     instantiated as MarcDataLine objects.
+  #                                     (See lib/base_objects/etc/marc_data_line.rb)
+  def initialize(opts={})
+    defaults = {
+        :title                => random_letters(pick_range(9..13)).capitalize,
+        :author               => random_name,
+        :marc_lines           => [],
+    }
+
+    @options = defaults.merge(opts)
+    opts_to_vars(@options)
+
+    # Add MARC Data Lines for title and author.
+    @marc_lines.unshift(
+        MarcDataLine.new(:tag => '100',:subfield => '|A',:value => @title),
+        MarcDataLine.new(:tag => '245',:subfield => '|A',:value => @author)
+    )
+
+  end
 end

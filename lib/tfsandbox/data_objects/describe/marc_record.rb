@@ -18,16 +18,14 @@
 #   as related records in the OLE Markup Language (OLEML).
 # @note MARC record subfield delimiters in OLE are flagged with a bar '|'
 #   instead of a dollar sign '$'.
-class MarcBibRecord < DataFactory
+class MarcRecord < DataFactory
 
-  attr_accessor :title,:author,:circulation_desk,:call_number,:call_number_type,:barcode
+  attr_accessor :bib,:circulation_desk,:call_number,:call_number_type,:barcode
+  alias :bib_record :bib
 
   # Options:
-  #   :title              String        The title on the bib record.    (Marc 245 $a)
-  #   :author             String        The author on the bib record.   (Marc 100 $a)
-  #   :marc_lines         Array         An array of MARC data values not named above,
-  #                                     instantiated as MarcDataLine objects.
-  #                                     (See lib/base_objects/etc/marc_data_line.rb)
+  #   :bib                Object        The Marc bib record to use.
+  #                                     (See lib/base_objects/etc/marc_bib.rb)
   #   :circulation_desk   Object        The OLE circulation desk to use.
   #                                     (See lib/base_objects/etc/circulation_desk.rb)
   #   :call_number        String        The call number to use on the holdings record.
@@ -36,9 +34,7 @@ class MarcBibRecord < DataFactory
   def initialize(browser,opts={})
     @browser = browser
     defaults = {
-        :title                => random_letters(pick_range(9..13)).capitalize,
-        :author               => random_name,
-        :marc_lines           => [],
+        :bib                  => MarcBib.new,
         :circulation_desk     => CirculationDesk.new,
         :call_number          => random_lcc,
         :call_number_type     => 'LCC',
@@ -51,13 +47,6 @@ class MarcBibRecord < DataFactory
 
     set_options(options)
 
-    requires :title,:author
-
-    # Add MARC Data Lines for title and author.
-    @marc_lines.unshift(
-      MarcDataLine.new(:tag => '100',:subfield => '|A',:value => @title),
-      MarcDataLine.new(:tag => '245',:subfield => '|A',:value => @author)
-    )
   end
 
   def create
@@ -71,12 +60,12 @@ class MarcBibRecord < DataFactory
     visit BibEditorPage do |page|
 
       # Enter all MARC lines in order.
-      @marc_lines.each_with_index do |marc_line,i|
+      @bib.marc_lines.each_with_index do |marc_line,i|
         page.tag_field(i).when_present.set(marc_line.tag)
         page.indicator_1_field(i).when_present.set(marc_line.ind_1)
         page.indicator_2_field(i).when_present.set(marc_line.ind_2)
         page.value_field(i).when_present.set(marc_line.subfield)
-        page.add_line(i) unless i == @marc_lines.count
+        page.add_line(i) unless i == @bib.marc_lines.count
       end
 
       # Save the bib record.

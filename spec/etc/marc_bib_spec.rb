@@ -11,11 +11,31 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+require 'rspec'
+require 'spec_helper'
 
-Given /^I have a resource$/ do
-  @resource = MarcRecord.new @browser
-end
+describe 'A MARC Bib Record' do
 
-When /^I enter a new bib record$/ do
-  @resource.create_bib
+  let(:bib)                  {MarcBib.new}
+
+  it 'has a title' do
+    expect(bib.title).to be_a(String)
+  end
+
+  it 'has an author' do
+    expect(bib.author).to be_a(String)
+  end
+
+  it 'has an array of Marc lines' do
+    expect(bib.marc_lines).to be_an(Array)
+  end
+  
+  it 'has the title as a Marc line' do
+    expect(bib.marc_lines[0].value).to eq(bib.title)
+  end
+
+  it 'has the author as a Marc line' do
+    expect(bib.marc_lines[1].value).to eq(bib.author)
+  end
+
 end

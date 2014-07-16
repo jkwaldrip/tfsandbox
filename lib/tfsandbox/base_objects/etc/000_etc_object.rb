@@ -21,4 +21,17 @@ class EtcObject
   include DateFactory
   include TFSandbox::Helpers
 
+  def opts_to_vars(hsh)
+    hsh.each do |k,v|
+      # Set instance variables.
+      instance_variable_set("@#{k}",v)
+      eigenclass = class << self
+        self
+      end
+      # Create accessors, unless the key ends in a question mark.
+      eigenclass.class_eval do
+        attr_accessor k unless k.to_s[/\?$/]
+      end
+    end
+  end
 end

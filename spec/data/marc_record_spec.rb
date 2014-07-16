@@ -11,11 +11,22 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+require 'rspec'
+require 'spec_helper'
 
-Given /^I have a resource$/ do
-  @resource = MarcRecord.new @browser
-end
+describe 'A MARC Record' do
 
-When /^I enter a new bib record$/ do
-  @resource.create_bib
+  before :all do
+    @browser  = Watir::Browser.new
+    @marc     = MarcRecord.new @browser
+  end
+
+  after :all do
+    @browser.quit unless @browser.nil?
+    sleep 30
+  end
+
+  it 'has a bib record' do
+    expect(@marc.bib_record).to be_a(MarcBib)
+  end
 end
