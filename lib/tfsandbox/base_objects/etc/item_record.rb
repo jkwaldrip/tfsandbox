@@ -12,7 +12,6 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-# An OLE Library System Holdings record.
-class Holdings < EtcObject
-
+# An OLE Library System Item record.
+class ItemRecord < EtcObject
 end
