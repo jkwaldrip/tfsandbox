@@ -22,22 +22,22 @@ World(RSpec::Matchers)
 
 # Set up Headless.
 if TFSandbox.options[:headless?]
-	@headless = Headless.new
-	@headless.start
+  @headless = Headless.new
+  @headless.start
 end
 
 Before do |scenario|
-	timeout = Time.now + 300
-	c = 0
-	begin
-	  @browser = Watir::Browser.new :firefox
-		break
-	rescue
-	  c += 1
-		puts "Browser connection not made. Trying again in 5 seconds. (Attempt #{c})"
-		sleep 5
+  timeout = Time.now + 300
+  c = 0
+  begin
+    @browser = Watir::Browser.new :firefox
+    break
+  rescue
+    c += 1
+    puts "Browser connection not made. Trying again in 5 seconds. (Attempt #{c})"
+    sleep 5
   end while Time.now < timeout
-	raise TFSandbox::Error,"Browser connection not made after 5 minutes." unless @browser.is_a?(Watir::Browser)
+  raise TFSandbox::Error,"Browser connection not made after 5 minutes." unless @browser.is_a?(Watir::Browser)
 end
 
 After do |scenario|
@@ -49,6 +49,6 @@ After do |scenario|
 end
 
 at_exit do
-	# Cleaning up Headless if it's been instantiated.
-	@headless.destroy if @headless
+  # Cleaning up Headless if it's been instantiated.
+  @headless.destroy if @headless
 end
