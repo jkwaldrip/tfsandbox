@@ -20,22 +20,24 @@
 #   instead of a dollar sign '$'.
 class MarcRecord < DataFactory
 
-  attr_accessor :bib,:holdings,:barcode
+  attr_accessor :bib,:holdings,:item
   alias :bib_record       :bib
   alias :holdings_record  :holdings
+  alias :item_record      :item
 
   # Options:
   #   :bib                Object        The Marc bib record to use.
   #                                     (See lib/tfsandbox/base_objects/etc/marc_bib.rb)
   #   :holdings           Object        The Holdings record to use.
   #                                     (See lib/tfsandbox/base_objects/etc/holdings_record.rb)
-  #   :barcode            String        The barcode to use on the item record.
+  #   :item               Object        The Item record to use.
+  #                                     (See lib/tfsandbox/base_objects/etc/item_record.rb)
   def initialize(browser,opts={})
     @browser = browser
     defaults = {
         :bib                  => MarcBib.new,
         :holdings             => HoldingsRecord.new,
-        :barcode              => random_num_string(pick_range(9..16),"OLEQA")
+        :item                 => ItemRecord.new,
     }
     options = defaults.merge(opts)
 

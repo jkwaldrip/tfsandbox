@@ -11,30 +11,27 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+
 require 'rspec'
 require 'spec_helper'
 
-describe 'A MARC Record' do
+describe 'An Item Record' do
 
-  before :all do
-    @browser  = Watir::Browser.new
-    @marc     = MarcRecord.new @browser
+  let(:item)                    {ItemRecord.new}
+
+  it 'has a record number' do
+    expect(item.number).to be_a(Fixnum)
   end
 
-  after :all do
-    @browser.quit unless @browser.nil?
-    sleep 30
+  it 'defaults to record 1' do
+    expect(item.number).to eq(1)
   end
 
-  it 'has a bib record' do
-    expect(@marc.bib_record).to be_a(MarcBib)
+  it 'has a barcode' do
+    expect(item.barcode).to be_a(String)
   end
 
-  it 'has a holdings record' do
-    expect(@marc.holdings_record).to be_a(HoldingsRecord)
-  end
-
-  it 'has an item record' do
-    expect(@marc.item_record).to be_an(ItemRecord)
+  it 'uses a default barcode prefix' do
+    expect(item.barcode).to match(/^OLEQA/)
   end
 end

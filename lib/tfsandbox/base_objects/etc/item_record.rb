@@ -14,4 +14,21 @@
 
 # An OLE Library System Item record.
 class ItemRecord < EtcObject
+
+  attr_accessor :barcode,:number
+
+  # Params:
+  #   :number             Fixnum        The sequential number representing the record's
+  #                                     place under the holdings record.
+  #                                     (See lib/tfsandbox/data_objects/describe/marc_record.rb)
+  #   :barcode            String        The barcode to use on the item record.
+  def initialize(opts = {})
+    defaults = {
+        :number               => 1,
+        :barcode              => random_num_string(pick_range(9..16),"OLEQA")
+    }
+    @options = defaults.merge(opts)
+
+    opts_to_vars(@options)
+  end
 end
