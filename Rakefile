@@ -28,7 +28,7 @@ desc 'Remove all test data and screenshots'
 task :clean_all do
   files = Dir['data/downloads/*','data/upload/*','screenshots/*'].sort
   if files.empty?
-    puts 'No data found.'
+    puts 'No files found.'
   else
     files.each {|file| File.delete file}
     puts "#{files.count} files deleted."
