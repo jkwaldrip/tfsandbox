@@ -27,17 +27,7 @@ if TFSandbox.options[:headless?]
 end
 
 Before do |scenario|
-  timeout = Time.now + 300
-  c = 0
-  begin
-    @browser = Watir::Browser.new :firefox
-    break
-  rescue
-    c += 1
-    puts "Browser connection not made. Trying again in 5 seconds. (Attempt #{c})"
-    sleep 5
-  end while Time.now < timeout
-  raise TFSandbox::Error,"Browser connection not made after 5 minutes." unless @browser.is_a?(Watir::Browser)
+  @browser = TFSandbox.start_browser
 end
 
 After do |scenario|

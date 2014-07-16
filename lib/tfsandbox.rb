@@ -71,8 +71,6 @@ module TFSandbox
   # Set the interval (in seconds) for spin assertions and other loops.
   Interval = 1
 
-  # Set the default timeout on Watir-Webdriver
-  Watir.default_timeout = @options[:default_wait]
 
   # Load internal classes/modules.
   Dir['lib/tfsandbox/*.rb'].sort.each {|file| require file}
@@ -85,4 +83,27 @@ module TFSandbox
     FileUtils::mkdir(dir) unless File.directory?(dir)
   end
 
+  # -- BROWSER SECTION --
+  # Set the default timeout on Watir-Webdriver
+  Watir.default_timeout = @options[:default_wait]
+
+  class << self
+    # Start the browser and return the browser instance.
+    def start_browser
+      timeout = Time.now + 300
+      c = 0
+      begin
+        browser = Watir::Browser.new :firefox
+        break
+      rescue
+        c += 1
+        puts "Browser connection not made. Trying again in 5 seconds. (Attempt #{c})"
+        sleep 5
+      end while Time.now < timeout
+      raise TFSandbox::Error,"Browser connection not made after 5 minutes." unless browser.is_a?(Watir::Browser)
+      browser
+    end
+    alias_method(:browser_start,:start_browser)
+
+  end
 end

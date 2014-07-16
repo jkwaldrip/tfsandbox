@@ -23,11 +23,10 @@ describe 'Watir-Webdriver' do
 
   after :all do
     @browser.quit unless @browser.nil? || @browser.empty?
-    sleep 30
   end
 
   it 'opens a new browser in headless mode' do
-    @browser = Watir::Browser.new
+    @browser = TFSandbox::start_browser
     expect(@browser).to be_a(Watir::Browser)
   end
 end

@@ -17,13 +17,12 @@ require 'spec_helper'
 describe 'A MARC Record' do
 
   before :all do
-    @browser  = Watir::Browser.new
+    @browser  = TFSandbox.start_browser
     @marc     = MarcRecord.new @browser
   end
 
   after :all do
     @browser.quit unless @browser.nil?
-    sleep 30
   end
 
   it 'has a bib record' do

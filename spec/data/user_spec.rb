@@ -17,7 +17,7 @@ require 'spec_helper'
 describe 'A User' do
 
   before :all do
-    @browser = Watir::Browser.new
+    @browser = TFSandbox::start_browser
     @user = User.new @browser
   end
 
