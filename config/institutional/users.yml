@@ -1,3 +1,7 @@
+# The default users and roles here are populated from the OLE Demo Data,
+# available at:
+#   http://demo.ole.kuali.org/
+#
 ---
 - :username: ole-quickstart
   :role: default

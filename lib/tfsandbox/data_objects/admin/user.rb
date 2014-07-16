@@ -17,6 +17,8 @@
 # @note User configuration info is loaded from/written to:
 #   config/institutional/users.yml
 class User < DataFactory
+  
+  attr_reader :username,:role,:name
 
   # Enter information for a new user, or select an existing user by username.
   # @note Usage:
@@ -110,7 +112,7 @@ class User < DataFactory
 
   # Create a new user.
   # - Only used if the given username or role is not found in the users file.
-  def create_new(user_info)
+  def create(user_info)
     # TODO Enter workflow to create a new user in the OLE system.
     save_user(user_info) if user_info[:save?]
   end

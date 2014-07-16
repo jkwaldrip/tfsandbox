@@ -11,23 +11,38 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-
 require 'rspec'
 require 'spec_helper'
 
-describe 'Watir-Webdriver' do
+describe 'A User' do
 
   before :all do
-    @browser = ''
+    @browser = Watir::Browser.new
+    @user = User.new @browser
   end
 
   after :all do
-    @browser.quit unless @browser.nil? || @browser.empty?
+    @browser.quit
     sleep 30
   end
 
-  it 'opens a new browser in headless mode' do
-    @browser = Watir::Browser.new
-    expect(@browser).to be_a(Watir::Browser)
+  it 'has a default username' do
+    expect(@user.username).to eq('ole-quickstart')
   end
+
+  it 'has a name' do
+    expect(@user.name).to eq('OLE Quickstart')
+  end
+
+  it 'has a default role' do
+    expect(@user.role).to eq('default')
+  end
+
+  it 'can be looked up by role' do
+    circ_user = User.new @browser,:lookup_role? => true,:role => 'circulation'
+    expect(circ_user.username).to eq('dev2')
+    expect(circ_user.name).to eq('Development 2')
+    expect(circ_user.role).to eq('circulation')
+  end
+
 end
