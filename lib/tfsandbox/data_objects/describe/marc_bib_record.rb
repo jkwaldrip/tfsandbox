@@ -20,8 +20,6 @@
 #   instead of a dollar sign '$'.
 class MarcBibRecord < DataFactory
 
-  include TFSandbox::Helpers
-
   attr_accessor :title,:author,:circulation_desk,:call_number,:call_number_type,:barcode
 
   # Options:
@@ -40,13 +38,11 @@ class MarcBibRecord < DataFactory
     defaults = {
         :title                => random_letters(pick_range(9..13)).capitalize,
         :author               => random_name,
-        :marc_lines           => []
-=begin
+        :marc_lines           => [],
         :circulation_desk     => CirculationDesk.new,
         :call_number          => random_lcc,
         :call_number_type     => 'LCC',
         :barcode              => random_num_string(pick_range(9..16),"OLEQA")
-=end
     }
     options = defaults.merge(opts)
 
