@@ -20,30 +20,24 @@
 #   instead of a dollar sign '$'.
 class MarcRecord < DataFactory
 
-  attr_accessor :bib,:circulation_desk,:call_number,:call_number_type,:barcode
-  alias :bib_record :bib
+  attr_accessor :bib,:holdings,:barcode
+  alias :bib_record       :bib
+  alias :holdings_record  :holdings
 
   # Options:
   #   :bib                Object        The Marc bib record to use.
-  #                                     (See lib/base_objects/etc/marc_bib.rb)
-  #   :circulation_desk   Object        The OLE circulation desk to use.
-  #                                     (See lib/base_objects/etc/circulation_desk.rb)
-  #   :call_number        String        The call number to use on the holdings record.
-  #   :call_number_type   String        The holdings call number type.
+  #                                     (See lib/tfsandbox/base_objects/etc/marc_bib.rb)
+  #   :holdings           Object        The Holdings record to use.
+  #                                     (See lib/tfsandbox/base_objects/etc/holdings_record.rb)
   #   :barcode            String        The barcode to use on the item record.
   def initialize(browser,opts={})
     @browser = browser
     defaults = {
         :bib                  => MarcBib.new,
-        :circulation_desk     => CirculationDesk.new,
-        :call_number          => random_lcc,
-        :call_number_type     => 'LCC',
+        :holdings             => HoldingsRecord.new,
         :barcode              => random_num_string(pick_range(9..16),"OLEQA")
     }
     options = defaults.merge(opts)
-
-    # Select a Holdings location from the Circulation desk unless given.
-    options[:location] ||= options[:circulation_desk].locations.sample
 
     set_options(options)
 

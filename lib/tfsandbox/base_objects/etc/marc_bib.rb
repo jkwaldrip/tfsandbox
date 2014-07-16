@@ -21,7 +21,7 @@ class MarcBib < EtcObject
   #   :author             String        The author on the bib record.   (Marc 100 $a)
   #   :marc_lines         Array         An array of MARC data values not named above,
   #                                     instantiated as MarcDataLine objects.
-  #                                     (See lib/base_objects/etc/marc_data_line.rb)
+  #                                     (See lib/tfsandbox/base_objects/etc/marc_data_line.rb)
   def initialize(opts={})
     defaults = {
         :title                => random_letters(pick_range(9..13)).capitalize,

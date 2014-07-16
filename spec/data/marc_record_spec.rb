@@ -29,4 +29,8 @@ describe 'A MARC Record' do
   it 'has a bib record' do
     expect(@marc.bib_record).to be_a(MarcBib)
   end
+
+  it 'has a holdings record' do
+    expect(@marc.holdings_record).to be_a(HoldingsRecord)
+  end
 end

@@ -15,4 +15,32 @@
 # An OLE Library System Holdings record.
 class HoldingsRecord < EtcObject
 
+  attr_accessor :number,:circulation_desk,:call_number,:call_number_type,:location
+
+  # Params:
+  #   :number             Fixnum        The sequential number representing the record's
+  #                                     place under the bib record.
+  #                                     (See lib/tfsandbox/data_objects/describe/marc_record.rb)
+  #   :circulation_desk   Object        The OLE circulation desk to use.
+  #                                     (See lib/tfsandbox/base_objects/etc/circulation_desk.rb)
+  #   :call_number        String        The call number to use on the holdings record.
+  #   :call_number_type   String        The holdings call number type.
+  #   :location           String        The location for the holdings record.
+  #                                     Defaults to a random selection from :circulation_desk.
+  #                                     (See lib/tfsandbox/base_objects/etc/circulation_desk.rb)
+  def initialize(opts={})
+    defaults = {
+        :number               => 1,
+        :circulation_desk     => CirculationDesk.new,
+        :call_number          => random_lcc,
+        :call_number_type     => 'LCC',
+    }
+
+    @options = defaults.merge(opts)
+
+    # Select a Holdings location from the Circulation desk unless given.
+    @options[:location] ||= @options[:circulation_desk].locations.sample
+
+    opts_to_vars(@options)
+  end
 end
