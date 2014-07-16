@@ -47,4 +47,15 @@ describe 'A Holdings Record' do
     expect(holdings.call_number_type).to eq('LCC')
   end
 
+  it 'has an item record' do
+    expect(holdings.items).to be_an(Array)
+    expect(holdings.items[0]).to be_an(ItemRecord)
+  end
+
+  it 'creates a new item record' do
+    holdings.new_item
+    expect(holdings.items.count).to eq(2)
+    expect(holdings.items[1]).to be_an(ItemRecord)
+  end
+
 end

@@ -18,7 +18,7 @@ class ItemRecord < EtcObject
   attr_accessor :barcode,:number
 
   # Params:
-  #   :number             Fixnum        The sequential number representing the record's
+  #   :number             Fixnum        The 1-based sequential number representing the record's
   #                                     place under the holdings record.
   #                                     (See lib/tfsandbox/data_objects/describe/marc_record.rb)
   #   :barcode            String        The barcode to use on the item record.

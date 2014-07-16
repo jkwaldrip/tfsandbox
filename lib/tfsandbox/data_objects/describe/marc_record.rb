@@ -20,26 +20,25 @@
 #   instead of a dollar sign '$'.
 class MarcRecord < DataFactory
 
-  attr_accessor :bib,:holdings,:item
-  alias :bib_record       :bib
-  alias :holdings_record  :holdings
-  alias :item_record      :item
+  attr_accessor :bib,:holdings
+  alias :bib_record         :bib
+  alias :holdings_records   :holdings
+  alias :holdings_record    :holdings
 
   # Options:
-  #   :bib                Object        The Marc bib record to use.
+  #   :bib                Object        The Marc Bib record to use.
   #                                     (See lib/tfsandbox/base_objects/etc/marc_bib.rb)
-  #   :holdings           Object        The Holdings record to use.
+  #   :holdings           Array         An array of Holdings Records to use.
+  #                                     (Defaults to 1 new holdings record.)
   #                                     (See lib/tfsandbox/base_objects/etc/holdings_record.rb)
-  #   :item               Object        The Item record to use.
-  #                                     (See lib/tfsandbox/base_objects/etc/item_record.rb)
   def initialize(browser,opts={})
     @browser = browser
     defaults = {
         :bib                  => MarcBib.new,
-        :holdings             => HoldingsRecord.new,
-        :item                 => ItemRecord.new,
+        :holdings             => [HoldingsRecord.new]
     }
     options = defaults.merge(opts)
+
 
     set_options(options)
 
@@ -49,6 +48,19 @@ class MarcRecord < DataFactory
     create_bib
     # create_holdings
     # create_item
+  end
+
+  # Create a new Holdings Record.
+  def new_holdings(opts={})
+    defaults = {:number => @holdings.count + 1}
+    @holdings << HoldingsRecord.new(defaults.merge(opts))
+  end
+  alias_method(:new_holdings_record,:new_holdings)
+
+  # Create a new Item Record with the given options on the Holdings Record specified by array index.
+  def new_item(which = 0,opts={})
+    defaults = {:number => @holdings[which].items.count}
+    @holdings[which].new_item(defaults.merge(opts))
   end
 
   # Create a bib record only.

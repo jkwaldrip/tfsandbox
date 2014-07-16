@@ -29,11 +29,26 @@ describe 'A MARC Record' do
     expect(@marc.bib_record).to be_a(MarcBib)
   end
 
-  it 'has a holdings record' do
-    expect(@marc.holdings_record).to be_a(HoldingsRecord)
+  it 'has one default holdings record' do
+    expect(@marc.holdings.count).to eq(1)
+    expect(@marc.holdings[0]).to be_a(HoldingsRecord)
   end
 
-  it 'has an item record' do
-    expect(@marc.item_record).to be_an(ItemRecord)
+  it 'can create a new holdings record' do
+    @marc.new_holdings
+    expect(@marc.holdings.count).to eq(2)
+    expect(@marc.holdings[1]).to be_a(HoldingsRecord)
   end
+
+  it 'has one default item record' do
+    expect(@marc.holdings[0].items.count).to eq(1)
+    expect(@marc.holdings[0].items[0]).to be_an(ItemRecord)
+  end
+
+  it 'can create a new item record' do
+    @marc.new_item(0)
+    expect(@marc.holdings[0].items.count).to eq(2)
+    expect(@marc.holdings[0].items[1]).to be_an(ItemRecord)
+  end
+
 end

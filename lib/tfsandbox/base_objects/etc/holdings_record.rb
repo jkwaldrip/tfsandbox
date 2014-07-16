@@ -18,7 +18,7 @@ class HoldingsRecord < EtcObject
   attr_accessor :number,:circulation_desk,:call_number,:call_number_type,:location
 
   # Params:
-  #   :number             Fixnum        The sequential number representing the record's
+  #   :number             Fixnum        The 1-based sequential number representing the record's
   #                                     place under the bib record.
   #                                     (See lib/tfsandbox/data_objects/describe/marc_record.rb)
   #   :circulation_desk   Object        The OLE circulation desk to use.
@@ -34,6 +34,7 @@ class HoldingsRecord < EtcObject
         :circulation_desk     => CirculationDesk.new,
         :call_number          => random_lcc,
         :call_number_type     => 'LCC',
+        :items                => [ItemRecord.new]
     }
 
     @options = defaults.merge(opts)
@@ -42,5 +43,11 @@ class HoldingsRecord < EtcObject
     @options[:location] ||= @options[:circulation_desk].locations.sample
 
     opts_to_vars(@options)
+  end
+
+  # Create a new Item Record.
+  def new_item(opts={})
+    defaults = {:number => @items.count + 1}
+    @items << ItemRecord.new(defaults.merge(opts))
   end
 end
