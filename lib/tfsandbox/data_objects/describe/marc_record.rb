@@ -67,6 +67,8 @@ class MarcRecord < DataFactory
   def create_bib
     visit BibEditorPage do |page|
 
+      # TODO Implement support for MARC control lines & leader field
+
       # Enter all MARC lines in order.
       @bib.marc_lines.each_with_index do |marc_line,i|
         page.tag_field(i).when_present.set(marc_line.tag)
@@ -79,5 +81,32 @@ class MarcRecord < DataFactory
       # Save the bib record.
       page.save
     end
+  end
+
+  # Create a holdings record only.
+  # @note This method assumes that we're starting from the BibEditorPage.
+  #   When invoking this method outside of initial bib creation, please retrieve
+  #   the bib record through the lookup_bib method.
+  #
+  # Params:
+  #   which         Fixnum          The 1-based holdings record number to enter.
+  #                                 This is used to determine both the holdings
+  #                                 record to select on the screen and the
+  #                                 object to select from the holdings array.
+  def create_holdings(which = 1)
+    ind = which - 1
+
+    on HoldingsEditorPage do |page|
+      page.add_instance unless page.holdings_link(which).present?
+      page.location_field.when_present.set(@holdings[ind].location)
+      page.call_number_field.when_present.set(@holdings[ind].call_number)
+      page.call_number_type_selector.when_present.select(@holdings[ind].call_number_type)
+      page.save
+    end
+  end
+
+  # Lookup a record.
+  def lookup(opts = {})
+    # TODO Describe Workbench lookup support.
   end
 end

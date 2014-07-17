@@ -38,16 +38,16 @@ class MarcEditorPage < KradPage
   element(:return_to_search_button)             {|b| b.iframeportlet.button(:id => "returnToSearch_button")}
 
   # -- Navigation Area Elements --
-  element(:delete_bib_button)                   {|b| b.iframeportlet.button(:title => 'Delete Bib')}
-  element(:add_instance_button)                 {|b| b.iframeportlet.button(:title => 'Add Instance')}
+  action(:delete_bib)                           {|b| b.iframeportlet.button(:title => 'Delete Bib').when_present.click}
+  action(:add_instance)                         {|b| b.iframeportlet.button(:title => 'Add Instance').when_present.click}
   element(:add_einstance_button)                {|b| b.iframeportlet.button(:title => 'Add EInstance')}
   element(:holdings_link)                       {|i,b| b.iframeportlet.span(:xpath => "//div[@id='holdingsItemTree_tree']/ul[@class='jstree-no-icons']/li[#{i}]/a/span[@class='uif-message']")}
   element(:holdings_icon)                       {|i,b| b.iframeportlet.ins(:xpath => "//div[@id='holdingsItemTree_tree']/ul[@class='jstree-no-icons']/li[#{i}]/ins")}
   element(:item_link)                           {|which_holdings,which_item,b| b.iframeportlet.a(:xpath => "//div[@id='holdingsItemTree_tree']/ul[@class='jstree-no-icons']/li[#{which_holdings}]/ul/li[#{which_item}]/a")}
   # @note Vakata Context Menu items are only present on the screen after the containing menu header has been right-clicked.
-  element(:delete_instance_button)              {|b| b.iframeportlet.div(:id => 'vakata-contextmenu').ul.li(:index => 0).a(:rel => "Delete")}
-  element(:add_item_button)                     {|b| b.iframeportlet.button(:title => 'Add Item')}
-  element(:delete_item_button)                  {|b| b.iframeportlet.div(:id => 'vakata-contextmenu').ul.li(:index => 0).a(:rel => 'Delete')}
+  action(:delete_instance)                      {|b| b.iframeportlet.div(:id => 'vakata-contextmenu').ul.li(:index => 0).a(:rel => "Delete").when_present.click}
+  action(:add_item)                             {|b| b.iframeportlet.button(:title => 'Add Item').when_present.click}
+  action(:delete_item)                          {|b| b.iframeportlet.div(:id => 'vakata-contextmenu').ul.li(:index => 0).a(:rel => 'Delete').when_present.click}
 
   # -- Workflow Control --
   # Save the current record and return success message/s.
