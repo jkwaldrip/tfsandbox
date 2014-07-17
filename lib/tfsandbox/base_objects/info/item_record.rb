@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 # An OLE Library System Item record.
-class ItemRecord < EtcObject
+class ItemRecord < InfoObject
 
   attr_accessor :barcode,:number
 

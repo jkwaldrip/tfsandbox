@@ -14,7 +14,7 @@
 
 # A circulation desk in the OLE Library System.
 # @note Configuration data for this class can be found in config/institutional/circulation.yml
-class CirculationDesk < EtcObject
+class CirculationDesk < InfoObject
 
   attr_reader :code,:name,:locations
 

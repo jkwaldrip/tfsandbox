@@ -14,7 +14,7 @@
 
 # A MARC format bibliographic record in the OLE Library System.
 #   This class serves as a container for MARC record bibliographic data.
-class MarcBib < EtcObject
+class MarcBib < InfoObject
 
   # Params:
   #   :title              String        The title on the bib record.    (Marc 245 $a)

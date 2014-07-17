@@ -15,7 +15,7 @@
 # An object to supplement DataFactory objects with additional data and functionality.
 # @note Mostly used to abstract additional data and data transformations away from
 #   the data factories themselves for operations like Marc record creation/reading.
-class EtcObject
+class InfoObject
 
   include StringFactory
   include DateFactory

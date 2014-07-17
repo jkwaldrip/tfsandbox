@@ -13,7 +13,7 @@
 #  limitations under the License
 
 # A single line on a MARC record.
-class MarcDataLine < EtcObject
+class MarcDataLine < InfoObject
 
   include TFSandbox::Helpers
 

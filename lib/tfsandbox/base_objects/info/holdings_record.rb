@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 # An OLE Library System Holdings record.
-class HoldingsRecord < EtcObject
+class HoldingsRecord < InfoObject
 
   attr_accessor :number,:circulation_desk,:call_number,:call_number_type,:location
 
