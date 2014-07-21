@@ -20,6 +20,6 @@ When /^I enter a new bib record$/ do
   @resource.create_bib
 end
 
-When /^I enter a holdings record$/ do
+When /^I enter a new holdings record$/ do
   @resource.create_holdings
 end

@@ -100,7 +100,7 @@ class MarcRecord < DataFactory
       page.add_instance unless page.holdings_link(which).present?
       page.location_field.when_present.set(@holdings[ind].location)
       page.call_number_field.when_present.set(@holdings[ind].call_number)
-      page.call_number_type_selector.when_present.select(@holdings[ind].call_number_type)
+      page.call_number_type_selector.when_present.select(/#{@holdings[ind].call_number_type}/)
       page.save
     end
   end
