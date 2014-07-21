@@ -18,6 +18,7 @@ $:.unshift(dir) unless $:.include?(dir)
 require 'cucumber/rake/task'
 require 'tfsandbox/version'
 require 'yaml'
+require 'rspec/core/rake_task'
 
 desc 'Display the current version number'
 task :version do
@@ -63,4 +64,9 @@ task :configurator do
     end
   end
   File.write('config/options.yml',options.to_yaml) 
+end
+
+desc 'Run development specs (not regression tests).'
+RSpec::Core::RakeTask.new(:specs) do |task|
+  task.rspec_opts = '-r spec_helper.rb'
 end
