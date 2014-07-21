@@ -16,16 +16,4 @@
 class KradPage < BasePage
 
   uses_frames
-
-  # Load the page inside a Fancybox iframe.
-  # @note Fancybox iframes are used for lightboxing
-  #   page-inside-a-page views in OLE KRAD-based pages.
-  def load_in_frame
-    self.instance_eval do 
-      def method_missing(sym, *args, &block)
-        @browser.iframe(:class => 'fancybox-iframe').send(sym, *args, &block)
-      end
-    end
-  end
-  alias_method(:load_in_iframe,:load_in_frame)
 end
