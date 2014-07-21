@@ -30,10 +30,9 @@ class BasePage < PageFactory
       element(:admin_tab)              {|b| b.div(:id => 'tabs').ul.li.a(:title => 'Admin')}
     end
 
-    # Select elements in either the iframeportlet or fancybox iframes.
+    # Call this method on a page to create frame elements.
     def uses_frames
       element(:iframeportlet)                       {|b| b.iframe(:id => 'iframeportlet')}
-      element(:fancybox)                            {|b| b.iframe(:class => 'fancybox-iframe')}
     end
   end
 end
