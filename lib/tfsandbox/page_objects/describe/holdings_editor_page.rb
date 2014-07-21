@@ -12,6 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+# The OLE Library System Holdings Editor page.
 class HoldingsEditorPage < MarcEditorPage
 
   # -- EDIT MODE (Default) --

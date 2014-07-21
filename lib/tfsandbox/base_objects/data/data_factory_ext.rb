@@ -15,4 +15,5 @@
 # Add Helpers module to DataFactory.
 class DataFactory
   include TFSandbox::Helpers
+  include RSpec::Matchers
 end

@@ -97,10 +97,43 @@ class MarcRecord < DataFactory
     ind = which - 1
 
     on HoldingsEditorPage do |page|
-      page.add_instance unless page.holdings_link(which).present?
+      if page.holdings_link(which).present?
+        page.holdings_link(which).click
+      else
+        page.add_instance
+      end
+      # TODO Raise error if HoldingsEditorPage does not load.
       page.location_field.when_present.set(@holdings[ind].location)
       page.call_number_field.when_present.set(@holdings[ind].call_number)
       page.call_number_type_selector.when_present.select(/#{@holdings[ind].call_number_type}/)
+      page.save
+    end
+  end
+
+
+  # Create an item record only.
+  # @note This method assumes that we're starting from the HoldingsEditorPage.
+  #   When invoking this method outside of initial bib creation, please retrieve
+  #   the bib record through the lookup_bib method, then open the relevant holdings
+  #   record with the open_holdings method.
+  #
+  # Params:
+  #   which_item        Fixnum          The 1-based holdings record number to enter.
+  #                                     This is used to determine both the holdings
+  #                                     record to select on the screen and the
+  #                                     object to select from the holdings array.
+  #
+  #   which_holdings    Fixnum          The 1-based holdings record on which to enter
+  #                                     the item record.
+  #
+  def create_item(which_item = 1,which_holdings = 1)
+    open_item(which_item,which_holdings)
+    item = @holdings[which_holdings - 1].items[which_item - 1]
+    expect(item).to be_an(ItemRecord)
+    on ItemEditorPage do |page|
+      page.item_type_selector.when_present.select(/#{item.type}/)
+      page.item_status_selector.when_present.select(/#{item.status}/)
+      page.barcode_field.when_present.set(item.barcode)
       page.save
     end
   end
@@ -109,4 +142,30 @@ class MarcRecord < DataFactory
   def lookup(opts = {})
     # TODO Describe Workbench lookup support.
   end
+
+  # Open a holdings record from the Bib Editor page.
+  # Params:
+  #   which       Fixnum          The 1-based number of the holdings record to open.
+  def open_holdings(which = 1)
+    on BibEditorPage do |page|
+      page.holdings_link(which).when_present.click
+    end
+    # TODO Raise error if HoldingsEditorPage does not load.
+  end
+
+  # Open an item record from the Holdings Editor page.
+  # Params:
+  #   which_item        Fixnum      The 1-based number of the item record to open.
+  #   which_holdings    Fixnum      The 1-based number of the holdings record to open.
+  def open_item(which_item = 1,which_holdings = 1)
+    on HoldingsEditorPage do |page|
+      unless page.item_link(which_holdings,which_item).present?
+        page.holdings_icon(which_holdings).when_present.click
+      end
+      page.item_link(which_holdings,which_item).when_present.click
+      page.windows[-1].use if page.windows.count > 1
+      # TODO Raise error if ItemEditorPage does not load.
+    end
+  end
+
 end

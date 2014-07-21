@@ -34,4 +34,14 @@ describe 'An Item Record' do
   it 'uses a default barcode prefix' do
     expect(item.barcode).to match(/^OLEQA/)
   end
+
+  it 'has a type' do
+    expect(item.type).to be_a(String)
+    expect(item.type).to eq('Book')
+  end
+
+  it 'has a status' do
+    expect(item.status).to be_a(String)
+    expect(item.status).to eq('Available')
+  end
 end

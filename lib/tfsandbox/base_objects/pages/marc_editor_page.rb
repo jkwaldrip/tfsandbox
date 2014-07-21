@@ -18,7 +18,6 @@ class MarcEditorPage < KradPage
 
   page_url "#{TFSandbox::url}portal.do?channelTitle=Marc Editor&channelUrl=#{TFSandbox::url}ole-kr-krad/editorcontroller?viewId=EditorView&methodToCall=load&docCategory=work&docType=bibliographic&docFormat=marc&editable=true"
 
-
   # -- Message Handling --
   element(:message_list)                        {|b| b.iframeportlet.ul(:id => 'pageValidationList')}
   element(:message)                             {|b| b.message_list.li(:class => 'uif-infoMessageItem')}

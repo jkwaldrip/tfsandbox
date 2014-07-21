@@ -23,3 +23,7 @@ end
 When /^I enter a new holdings record$/ do
   @resource.create_holdings
 end
+
+When /^I enter a new item record$/ do
+  @resource.create_item
+end
